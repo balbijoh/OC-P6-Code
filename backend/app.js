@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const path = require('path');
 const utilisateurRoutes = require('./routes/utilisateur.js');
+const saucesRoutes = require('./routes/sauces.js');
 
 mongoose.connect('mongodb+srv://balbijoh:V47geur0bmxJR8zY@cluster0.8m5swpi.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -20,6 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/auth', utilisateurRoutes);
+app.use('/api/sauces', saucesRoutes);
 
 module.exports = app;
