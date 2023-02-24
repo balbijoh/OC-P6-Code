@@ -8,7 +8,8 @@ schemaPassword
 .has().uppercase()
 .has().lowercase()
 .has().digits(2)
-.has().not().spaces();
+.has().not().spaces()
+.has().not().symbols(undefined, '=', '\'');
 
 module.exports = (req, res, next) => {
     if (schemaPassword.validate(req.body.password)) {
