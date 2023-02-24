@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwtoken = require('jsonwebtoken');
 const Utilisateur = require('../models/Utilisateur.js');
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Controller POST pour créer un compte utilisateur
 exports.signup = (req, res, next) => {
     // On hash le mot de passe
@@ -19,6 +21,8 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Controller POST pour se connecter à un compte existant
 exports.login = (req, res, next) => {
     Utilisateur.findOne({ email: req.body.email })
