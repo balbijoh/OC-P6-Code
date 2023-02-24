@@ -3,4 +3,8 @@
 # Node
 /node_modules
 
+# Fichiers images
 /images
+
+# Fichier .env -> à préciser à l'évaluateur et lui donner les variables
+.env
