@@ -33,7 +33,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
 app.use('/api', apiLimiter);
 app.use('/api/auth', utilisateurRoutes);
 app.use('/api/sauces', saucesRoutes);

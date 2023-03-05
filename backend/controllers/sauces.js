@@ -146,10 +146,10 @@ exports.likeSauce = (req, res, next) => {
                     .catch(error => res.status(401).json({ error: error }));
                 };
 
-                // Si l'utilisateur enlève son dislike, on incrémente like++ et on retire l'userId de usersDisliked
+                // Si l'utilisateur enlève son dislike, on décrémente dislike-- et on retire l'userId de usersDisliked
                 if (sauce.usersDisliked.includes(req.body.userId)) {
                     ModelsSauce.updateOne({ _id: req.params.id }, {
-                        $inc: { likes: +1 },
+                        $inc: { dislikes: -1 },
                         $pull: { usersDisliked: req.body.userId }
                     })
                     .then(() => res.status(200).json({ message : 'Dislike supprimé' }))
