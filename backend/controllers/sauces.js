@@ -25,11 +25,12 @@ exports.getOneSauce = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
-    // On supprime l'id auto-généré
+    // On supprime l'id de la requête envoyée par le client
     delete sauceObject._id;
 
     const newSauce = new ModelsSauce({
         ...sauceObject,
+        // On reconstitue l'URL complète de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
@@ -50,6 +51,7 @@ exports.modifySauce = (req, res, next) => {
     // S'il n'y a pas de modification d'image => ...req.body
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
+        // On reconstitue l'URL complète de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   
