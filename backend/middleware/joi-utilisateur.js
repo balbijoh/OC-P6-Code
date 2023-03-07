@@ -1,9 +1,18 @@
 const joi = require('joi');
+const { joiPasswordExtendCore } = require('joi-password');
+const joiPassword = joi.extend(joiPasswordExtendCore);
 
 module.exports = (req, res, next) => {
     const Utilisateur = joi.object({
         email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'fr'] } }),
-        password: joi.string().pattern(new RegExp('^[a-zA-Z0-9&#-_@+*%!]{8,100}$'))
+        password: joiPassword
+            .string()
+            .minOfSpecialCharacters(1)
+            .minOfLowercase(1)
+            .minOfUppercase(1)
+            .minOfNumeric(1)
+            .noWhiteSpaces()
+            .required(),
     });
 
     try {
