@@ -25,11 +25,13 @@ exports.getOneSauce = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
-    // On supprime l'id de la requête envoyée par le client
+    // On supprime l'id et l'userId de la requête envoyée par le client
     delete sauceObject._id;
+    delete sauceObject._userId;
 
     const newSauce = new ModelsSauce({
         ...sauceObject,
+        userId: req.auth.userId,
         // On reconstitue l'URL complète de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
@@ -49,13 +51,13 @@ exports.createSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
     // S'il y a une modification d'image => req.body.sauce
     // S'il n'y a pas de modification d'image => ...req.body
-    const sauceObject = req.file ? {
-        ...JSON.parse(req.body.sauce),
+    const sauceObject = req.file ? 
+        {...JSON.parse(req.body.sauce),
         // On reconstitue l'URL complète de l'image
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`} 
+        : { ...req.body };
   
-    // On supprime l'id automatiquement généré
+    // On supprime l'userId de la requête envoyée par le client
     delete sauceObject._userId;
 
     ModelsSauce.findOne({ _id: req.params.id })
