@@ -25,11 +25,12 @@ exports.getOneSauce = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
-    // On supprime l'id auto-généré
+    // On supprime l'id de la requête envoyée par le client
     delete sauceObject._id;
 
     const newSauce = new ModelsSauce({
         ...sauceObject,
+        // On reconstitue l'URL complète de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
@@ -50,6 +51,7 @@ exports.modifySauce = (req, res, next) => {
     // S'il n'y a pas de modification d'image => ...req.body
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
+        // On reconstitue l'URL complète de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   
@@ -146,10 +148,10 @@ exports.likeSauce = (req, res, next) => {
                     .catch(error => res.status(401).json({ error: error }));
                 };
 
-                // Si l'utilisateur enlève son dislike, on incrémente like++ et on retire l'userId de usersDisliked
+                // Si l'utilisateur enlève son dislike, on décrémente dislike-- et on retire l'userId de usersDisliked
                 if (sauce.usersDisliked.includes(req.body.userId)) {
                     ModelsSauce.updateOne({ _id: req.params.id }, {
-                        $inc: { likes: +1 },
+                        $inc: { dislikes: -1 },
                         $pull: { usersDisliked: req.body.userId }
                     })
                     .then(() => res.status(200).json({ message : 'Dislike supprimé' }))

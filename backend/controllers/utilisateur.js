@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwtoken = require('jsonwebtoken');
 const Utilisateur = require('../models/Utilisateur.js');
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Controller POST pour créer un compte utilisateur
 exports.signup = (req, res, next) => {
     // On hash le mot de passe
@@ -14,11 +16,13 @@ exports.signup = (req, res, next) => {
         
         utilisateur.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => res.status(400).json({ error: error }));
     })
-    .catch(error => res.status(500).json({ error }));
+    .catch(error => res.status(500).json({ error: error }));
 };
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Controller POST pour se connecter à un compte existant
 exports.login = (req, res, next) => {
     Utilisateur.findOne({ email: req.body.email })
@@ -41,8 +45,8 @@ exports.login = (req, res, next) => {
                     });
                 };
             })
-            .catch(error => res.status(500).json({ error }));
+            .catch(error => res.status(500).json({ error: error }));
         };
     })
-    .catch(error => res.status(500).json({ error }));
+    .catch(error => res.status(500).json({ error: error }));
 };
