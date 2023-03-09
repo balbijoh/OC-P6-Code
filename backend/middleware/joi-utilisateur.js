@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
         email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'fr'] } }),
         password: joiPassword
             .string()
+            .min(8)
             .minOfSpecialCharacters(1)
             .minOfLowercase(1)
             .minOfUppercase(1)
